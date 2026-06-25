@@ -1,0 +1,107 @@
+@extends('layouts.main')
+
+@section('content')
+
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: #2c3e50; margin: 0;">Riwayat Reservasi Saya</h2>
+            <a href="{{ route('reservations.create') }}">
+                <button class="btn-primary">+ Buat Reservasi Baru</button>
+            </a>
+        </div>
+
+        @if (session('success'))
+            <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
+                <strong>Sukses!</strong> {{ session('success') }}
+            </div>
+        @endif
+
+        <div style="background-color: #e2f3f5; padding: 15px; border-left: 5px solid #17a2b8; margin-bottom: 20px; border-radius: 4px;">
+            <strong style="color: #0c5460;">💳 Informasi Pembayaran:</strong><br>
+            <span style="color: #333;">Silakan transfer pembayaran sesuai harga paket ke rekening berikut:</span><br>
+            <strong style="font-size: 16px; color: #0056b3;">BCA: 1234567890 a.n. Salma Photography</strong><br>
+            <span style="color: #333; font-size: 14px;">Jika sudah transfer, segera upload bukti pembayaran pada tabel di bawah ini agar pesanan dapat dikonfirmasi.</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table width="100%" style="border-collapse: collapse; min-width: 800px;">
+                <thead style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                    <tr>
+                        <th style="padding: 12px; text-align: left;">No</th>
+                        <th style="padding: 12px; text-align: left;">Paket Fotografi</th>
+                        <th style="padding: 12px; text-align: left;">Tanggal & Jam</th>
+                        <th style="padding: 12px; text-align: left;">Lokasi</th>
+                        <th style="padding: 12px; text-align: left;">Catatan Saya</th>
+                        <th style="padding: 12px; text-align: left;">Status</th>
+                        <th style="padding: 12px; text-align: left;">Bukti Pembayaran</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($reservations as $index => $reservation)
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px;">{{ $index + 1 }}</td>
+                            <td style="padding: 12px; font-weight: bold; color: #2c3e50;">{{ $reservation->package->name ?? 'Paket Tidak Ditemukan' }}</td>
+                            <td style="padding: 12px;">{{ $reservation->reservation_date }} <br> <span style="color: #7f8c8d; font-size: 13px;">{{ $reservation->reservation_time }}</span></td>
+                            <td style="padding: 12px;">{{ $reservation->location ?? '-' }}</td>
+
+                            <td style="padding: 12px; font-size: 13px; color: #555;">{{ $reservation->notes ?? '-' }}</td>
+
+                            <td style="padding: 12px;">
+                                @if($reservation->status == 'pending')
+                                    <span style="background-color: #fff3cd; color: #856404; padding: 5px 10px; border-radius: 20px; font-size: 13px; font-weight: bold;">Pending</span>
+                                @elseif($reservation->status == 'confirmed')
+                                    <span style="background-color: #cce5ff; color: #004085; padding: 5px 10px; border-radius: 20px; font-size: 13px; font-weight: bold;">Confirmed</span>
+                                @elseif($reservation->status == 'completed')
+                                    <span style="background-color: #d4edda; color: #155724; padding: 5px 10px; border-radius: 20px; font-size: 13px; font-weight: bold;">Selesai</span>
+                                @else
+                                    <span style="background-color: #f8d7da; color: #721c24; padding: 5px 10px; border-radius: 20px; font-size: 13px; font-weight: bold;">Dibatalkan</span>
+                                @endif
+                            </td>
+
+                            <td style="padding: 12px;">
+                                @if($reservation->status == 'pending')
+                                    @if($reservation->payment_proof == null)
+                                        <form action="{{ route('reservations.upload_payment', $reservation->id) }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 5px;">
+                                            @csrf
+                                            <input type="file" name="payment_proof" required style="font-size: 12px;">
+                                            <button type="submit" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">Upload</button>
+                                        </form>
+                                    @else
+                                        <span style="color: #28a745; font-weight: bold; font-size: 13px;">✔ Terkirim</span><br>
+                                        <!-- Ini link yang memanggil SweetAlert -->
+                                        <a href="javascript:void(0);" onclick="lihatBukti('{{ asset('storage/' . $reservation->payment_proof) }}')" style="font-size: 13px; color: #0056b3; text-decoration: underline; cursor: pointer;">Lihat Bukti</a>
+                                    @endif
+                                @else
+                                    <span style="color: #6c757d;">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" align="center" style="padding: 30px; color: #6c757d;">Kamu belum memiliki riwayat reservasi.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Script SweetAlert2 untuk memunculkan pop-up gambar -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function lihatBukti(imageUrl) {
+            Swal.fire({
+                title: 'Bukti Pembayaran',
+                text: 'Berikut adalah bukti transfer yang Anda unggah.',
+                imageUrl: imageUrl,
+                imageWidth: 400, // Lebar pop-up
+                imageAlt: 'Foto Bukti Pembayaran',
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#3A3959',
+                backdrop: `rgba(34, 34, 46, 0.8)` // Background abu-abu gelap transparan
+            });
+        }
+    </script>
+
+@endsection
