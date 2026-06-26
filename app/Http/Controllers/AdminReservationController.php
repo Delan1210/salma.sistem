@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AdminReservationController extends Controller
 {
     // Menampilkan semua reservasi untuk admin
-   public function index()
+    public function index()
     {
         // 1. Ambil data khusus Jasa Fotografi
         $photoReservations = Reservation::whereHas('package', function ($query) {
@@ -36,9 +37,7 @@ class AdminReservationController extends Controller
             ->join('packages', 'reservations.package_id', '=', 'packages.id')
             ->sum('packages.price');
 
-        // =========================================================
         // 5. LOGIKA UNTUK KALENDER PINTAR ADMIN
-        // =========================================================
         $kalenderReservations = Reservation::whereHas('package', function($query) {
             $query->where('category', 'photography');
         })->whereIn('status', ['pending', 'confirmed'])->with('package')->get();
@@ -68,7 +67,6 @@ class AdminReservationController extends Controller
                 $bookedDatesData[$date]['status'] = 'full';
             }
         }
-        // =========================================================
 
         return view('admin.reservations.index', [
             'photoReservations' => $photoReservations,
@@ -79,13 +77,10 @@ class AdminReservationController extends Controller
             'pendingReservations' => $pendingReservations,
             'completedReservations' => $completedReservations,
             'totalRevenue' => $totalRevenue,
-            // Kirim data kalender ke View
             'bookedDatesData' => $bookedDatesData,
         ]);
     }
 
-    // FUNGSI BARU UNTUK INPUT RESERVASI OFFLINE OLEH ADMIN
-    // Menampilkan halaman form input offline
     public function create()
     {
         // Ambil data paket fotografi untuk ditampilkan di dropdown
@@ -94,7 +89,7 @@ class AdminReservationController extends Controller
     }
 
     // Menyimpan data dari form offline ke database
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'package_id' => 'required|exists:packages,id',
@@ -102,6 +97,8 @@ class AdminReservationController extends Controller
             'reservation_date' => 'required|date',
             'reservation_time' => 'required',
             'location' => 'required|string',
+            'notes' => 'nullable|string', // Validasi untuk pilihan background
+            'payment_proof' => 'nullable|image|mimes:jpeg,png,jpg|max:5048' // Opsional kalau bayar QRIS
         ]);
 
         // SINKRONISASI FORMAT JAM: Ubah "14:00" menjadi "14:00:00" agar cocok dengan database
@@ -110,9 +107,13 @@ class AdminReservationController extends Controller
             $bookingTime .= ':00';
         }
 
-        // --- SATPAM ANTI DOUBLE BOOKING KHUSUS ADMIN ---
+        // SATPAM ANTI DOUBLE BOOKING KHUSUS ADMIN (1 JAM)
+        $waktuMulai = Carbon::parse($bookingTime);
+        $batasBawah = (clone $waktuMulai)->subMinutes(59)->format('H:i:s');
+        $batasAtas  = (clone $waktuMulai)->addMinutes(59)->format('H:i:s');
+
         $isBooked = Reservation::where('reservation_date', $request->reservation_date)
-            ->where('reservation_time', $bookingTime) // Perbandingan menggunakan jam yang sudah disinkronkan
+            ->whereBetween('reservation_time', [$batasBawah, $batasAtas])
             ->whereIn('status', ['pending', 'confirmed'])
             ->whereHas('package', function($q) {
                 $q->where('category', 'photography');
@@ -120,13 +121,16 @@ class AdminReservationController extends Controller
             ->exists();
 
         if ($isBooked) {
-            return back()->withInput()->with('error', 'Gagal! Jam ' . $request->reservation_time . ' di tanggal tersebut sudah terisi. Silakan cek kalender dan pilih jam lain.');
+            return back()->withInput()->with('error', 'Gagal! Waktu jam ' . substr($bookingTime, 0, 5) . ' berbenturan dengan sesi foto lain. Silakan cek kalender dan pilih jadwal lain.');
         }
-        // ------------------------------------------------
 
+        // Menggabungkan nama pemesan offline dengan catatan/background
         $notes = "[OFFLINE] A/N: " . $request->customer_name;
+        if ($request->notes) {
+            $notes .= " | Catatan: " . $request->notes;
+        }
 
-        Reservation::create([
+        $data = [
             'user_id' => Auth::id(),
             'package_id' => $request->package_id,
             'reservation_date' => $request->reservation_date,
@@ -135,13 +139,20 @@ class AdminReservationController extends Controller
             'notes' => $notes,
             'status' => 'confirmed',
             'payment_proof' => 'offline.png'
-        ]);
+        ];
+
+        // Jika admin mengupload bukti QRIS/Transfer
+        if ($request->hasFile('payment_proof')) {
+            $data['payment_proof'] = $request->file('payment_proof')->store('payments', 'public');
+        }
+
+        Reservation::create($data);
 
         return redirect()->route('admin.reservations.index')->with('success', 'Reservasi offline berhasil dicatat!');
     }
 
     // mengubah status reservasi (misal: konfirmasi, tolak, selesai)
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, string $id)
     {
         // Validasi input status
         $request->validate([
@@ -156,7 +167,7 @@ class AdminReservationController extends Controller
         return back()->with('success', 'Status reservasi berhasil diperbarui.');
     }
 
-    public function destroy($id)
+    public function destroy( string$id)
     {
         // Cari data reservasi berdasarkan ID
         $reservation = Reservation::findOrFail($id);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ReservationController extends Controller
 {
@@ -78,7 +79,7 @@ class ReservationController extends Controller
     }
 
     // menyimpan data reservasi baru
-public function store(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'package_id' => 'required|exists:packages,id',
@@ -98,10 +99,15 @@ public function store(Request $request)
             $bookingTime .= ':00';
         }
 
-        // --- SATPAM ANTI DOUBLE BOOKING KHUSUS FOTOGRAFI ---
-        if ($package->category == 'photography') {
+        // ATPAM ANTI DOUBLE BOOKING KHUSUS FOTOGRAFI (1 JAM BLOKIR)
+        if ($package->category == 'photography' && $bookingTime) {
+
+            $waktuMulai = Carbon::parse($bookingTime);
+            $batasBawah = (clone $waktuMulai)->subMinutes(59)->format('H:i:s');
+            $batasAtas  = (clone $waktuMulai)->addMinutes(59)->format('H:i:s');
+
             $isBooked = Reservation::where('reservation_date', $request->reservation_date)
-                ->where('reservation_time', $bookingTime)
+                ->whereBetween('reservation_time', [$batasBawah, $batasAtas])
                 ->whereIn('status', ['pending', 'confirmed'])
                 ->whereHas('package', function($q) {
                     $q->where('category', 'photography');
@@ -109,7 +115,7 @@ public function store(Request $request)
                 ->exists();
 
             if ($isBooked) {
-                return back()->withInput()->with('error', 'Waduh! Jam ' . $request->reservation_time . ' di tanggal tersebut baru saja dibooking orang lain. Silakan pilih jam lain ya!');
+                return back()->withInput()->with('error', 'Waduh! Waktu jam ' . substr($bookingTime, 0, 5) . ' berbenturan dengan sesi foto lain. Silakan pilih jadwal lain ya!');
             }
         }
         // ----------------------------------------------------
@@ -135,7 +141,7 @@ public function store(Request $request)
     }
 
     // buat upload ulang bukti pembayaran
-    public function uploadPayment(Request $request, $id)
+    public function uploadPayment(Request $request, string $id)
     {
         $request->validate([
             'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:5048',

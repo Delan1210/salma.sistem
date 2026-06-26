@@ -13,8 +13,10 @@
         </div>
     @endif
 
-    <form action="{{ route('admin.reservations.store') }}" method="POST">
+    <form action="{{ route('admin.reservations.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+
+        <input type="hidden" name="location" value="Studio Salma">
 
         <div style="margin-bottom: 15px;">
             <label style="font-weight: bold; display: block; margin-bottom: 5px; color: #22222E;">Nama Pelanggan Offline</label>
@@ -37,14 +39,21 @@
                 <input type="text" name="reservation_date" id="admin_date" value="{{ old('reservation_date') }}" required placeholder="Pilih tanggal..." style="width: 100%; padding: 10px; border: 1px solid #ADA9BA; border-radius: 6px; box-sizing: border-box; background: white; cursor: pointer;">
             </div>
             <div style="flex: 1;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px; color: #22222E;">Jam Mulai</label>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px; color: #22222E;">Jam Mulai (Sesi 1 Jam)</label>
                 <input type="text" name="reservation_time" id="admin_time" value="{{ old('reservation_time') }}" required placeholder="Pilih jam..." style="width: 100%; padding: 10px; border: 1px solid #ADA9BA; border-radius: 6px; box-sizing: border-box; background: white; cursor: pointer;">
             </div>
         </div>
 
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px; color: #22222E;">Upload Bukti Pembayaran (Opsional)</label>
+            <input type="file" name="payment_proof" accept="image/*" style="width: 100%; padding: 9px; border: 1px solid #ADA9BA; border-radius: 6px; box-sizing: border-box; background: white;">
+            <span style="display: block; color: #706F8E; font-size: 12px; margin-top: 5px;">💡 Upload screenshot jika bayar via QRIS/Transfer. Kosongkan jika bayar Cash.</span>
+        </div>
+
         <div style="margin-bottom: 25px;">
-            <label style="font-weight: bold; display: block; margin-bottom: 5px; color: #22222E;">Lokasi</label>
-            <input type="text" name="location" value="{{ old('location', 'Studio Salma') }}" required style="width: 100%; padding: 10px; border: 1px solid #ADA9BA; border-radius: 6px; box-sizing: border-box;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px; color: #22222E;">Pilihan Background / Catatan Pelanggan</label>
+            <textarea name="notes" rows="3" placeholder="Misal: Request background warna putih, gaya ceria..." style="width: 100%; padding: 10px; border: 1px solid #ADA9BA; border-radius: 6px; box-sizing: border-box; font-family: inherit;">{{ old('notes') }}</textarea>
+            <span style="display: block; color: #706F8E; font-size: 12px; margin-top: 5px;">💡 Catat request background (ada 5 pilihan studio) atau pesan khusus dari pelanggan di sini.</span>
         </div>
 
         <button type="submit" style="width: 100%; background: #3A3959; color: white; padding: 12px; border: none; border-radius: 50px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.backgroundColor='#706F8E'" onmouseout="this.style.backgroundColor='#3A3959'">
@@ -66,8 +75,9 @@
             noCalendar: true,
             dateFormat: "H:i",
             time_24hr: true,
-            minTime: "08:00",
-            maxTime: "21:00"
+            minTime: "09:00",
+            maxTime: "21:00",
+            minuteIncrement: 60
         });
     });
 </script>

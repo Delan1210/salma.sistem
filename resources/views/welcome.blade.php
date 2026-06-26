@@ -392,8 +392,6 @@
             onChange: function(selectedDates, dateStr, instance) {
                 if (bookedData[dateStr]) {
                     let info = bookedData[dateStr];
-
-                    // Susun list HTML untuk jam yang sudah dibooking
                     let jamList = info.booked_hours.map(j => `<li>${j}</li>`).join('');
 
                     Swal.fire({
@@ -414,7 +412,7 @@
                 } else {
                      Swal.fire({
                         title: `Jadwal Tgl ${dateStr}`,
-                        text: "Studio masih kosong seharian! Silakan booking dari jam 08:00 - 21:00.",
+                        text: "Studio masih kosong seharian! Silakan booking dari jam 09:00 - 21:00.",
                         icon: 'success',
                         confirmButtonText: 'Mantap!',
                         confirmButtonColor: '#27ae60'
