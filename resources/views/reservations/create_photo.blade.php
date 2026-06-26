@@ -83,9 +83,8 @@
                     <img src="{{ asset('images/qris-studio.png') }}" alt="QRIS" style="max-width: 180px; border-radius: 12px; box-shadow: 0 4px 15px rgba(34, 34, 46, 0.1);">
                     <div style="text-align: left; min-width: 200px;">
                         <p style="margin: 0 0 10px 0; font-size: 13px; color: #706F8E; border-bottom: 1px solid #EAEBE6; padding-bottom: 5px; font-weight: bold;">Atau transfer manual ke:</p>
-                        <p style="margin: 5px 0; font-size: 15px; color: #22222E;"><strong>BCA:</strong> 1234-5678-90</p>
-                        <p style="margin: 5px 0; font-size: 15px; color: #22222E;"><strong>BSI:</strong> 0987-6543-21</p>
-                        <p style="margin: 5px 0 0 0; font-size: 14px; color: #22222E;"><strong>A.N:</strong> Salma Studio</p>
+                        <p style="margin: 5px 0; font-size: 15px; color: #22222E;"><strong>Bank Jago:</strong> 105481524829 </p>
+                        <p style="margin: 5px 0 0 0; font-size: 14px; color: #22222E;"><strong>A.N:</strong> Riki Firmansyah </p>
                     </div>
                 </div>
             </div>

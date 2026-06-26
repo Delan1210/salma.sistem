@@ -183,7 +183,7 @@
                                 <td style="color: #495057;">{{ $user->email }}</td>
 
                                 <td style="font-weight: 500; color: #706F8E;">
-                                    {{ $user->phone_number ?? '-' }}
+                                    {{ $user->no_telp ?? '-' }}
                                 </td>
 
                                 <td align="center">
