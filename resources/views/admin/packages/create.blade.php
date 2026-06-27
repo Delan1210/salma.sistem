@@ -168,7 +168,13 @@
 
             <div class="form-group" id="bungkus-durasi">
                 <label class="form-label">Durasi Pemotretan</label>
-                <input type="text" name="duration" id="input-durasi" class="form-control" required placeholder="Contoh: 2 Jam / Seharian">
+                <select name="duration" id="input-durasi" class="form-control" required>
+                    <option value="">-- Pilih Durasi --</option>
+                    <option value="1 Jam" {{ old('duration') == '1 Jam' ? 'selected' : '' }}>1 Jam (Standar Sesi Studio)</option>
+                    <option value="Seharian" {{ old('duration') == 'Seharian' ? 'selected' : '' }}>Seharian (Full Day / Prewed)</option>
+                    <option value="-" {{ old('duration') == '-' ? 'selected' : '' }}>- (Khusus Paket Cetak Foto)</option>
+                </select>
+                <span class="form-text">💡 Pilih durasi. Sesi studio otomatis dikunci 1 Jam di kalender reservasi.</span>
             </div>
 
             <div class="form-group">

@@ -139,7 +139,7 @@
        ========================================= */
     .map-section {
         background-color: #EAEBE6;
-        padding: 0 10% 80px; /* Padding bawah yang besar untuk tombol */
+        padding: 0 10% 80px;
         text-align: center;
     }
 
@@ -232,7 +232,7 @@
             </div>
             <h3>Lokasi Studio</h3>
             <!-- Teks alamat sudah di-update -->
-            <p>Jl. Ahmad Yani No.5, Pemurus Dalam, Kec. Banjarmasin Sel., Kota Banjarmasin<br>Buka Setiap Hari: 08.00 - 21.00 WITA</p>
+            <p>Jl. Ahmad Yani No.5, Pemurus Dalam, Kec. Banjarmasin Sel., Kota Banjarmasin<br>Buka Setiap Hari: 09.00 - 21.00 WITA</p>
         </div>
 
         <div class="contact-card">
