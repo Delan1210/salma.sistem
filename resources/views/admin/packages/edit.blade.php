@@ -2,7 +2,6 @@
 
 @section('content')
 <style>
-
     .dashboard-container {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         color: #22222E;
@@ -165,6 +164,8 @@
             @csrf
             @method('PUT')
 
+            <input type="hidden" name="duration" id="input-durasi" value="{{ $package->duration }}">
+
             <div class="form-group">
                 <label class="form-label">Nama Paket</label>
                 <input type="text" name="name" value="{{ $package->name }}" class="form-control" required>
@@ -183,11 +184,6 @@
                     <label class="form-label">Harga (Rp)</label>
                     <input type="number" name="price" value="{{ $package->price }}" class="form-control" required>
                 </div>
-            </div>
-
-            <div class="form-group" id="bungkus-durasi">
-                <label class="form-label">Durasi Pemotretan</label>
-                <input type="text" name="duration" id="input-durasi" value="{{ $package->duration }}" class="form-control" required>
             </div>
 
             <div class="form-group">
@@ -219,21 +215,12 @@
 <script>
     function aturDurasi() {
         let kategori = document.getElementById('kategori').value;
-        let bungkusDurasi = document.getElementById('bungkus-durasi');
         let inputDurasi = document.getElementById('input-durasi');
 
         if (kategori === 'cetak') {
-            bungkusDurasi.style.display = 'none';
-            inputDurasi.removeAttribute('required');
-            if(inputDurasi.value === '') {
-                 inputDurasi.value = '-';
-            }
+            inputDurasi.value = '-';
         } else {
-            bungkusDurasi.style.display = 'block';
-            inputDurasi.setAttribute('required', 'required');
-            if(inputDurasi.value === '-') {
-                inputDurasi.value = '';
-            }
+            inputDurasi.value = '45 Menit';
         }
     }
 

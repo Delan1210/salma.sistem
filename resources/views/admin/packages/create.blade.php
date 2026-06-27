@@ -146,6 +146,8 @@
         <form action="{{ route('admin.packages.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            <input type="hidden" name="duration" id="input-durasi" value="45 Menit">
+
             <div class="form-group">
                 <label class="form-label">Nama Paket</label>
                 <input type="text" name="name" class="form-control" required placeholder="Contoh: Paket Prewedding Outdoor">
@@ -164,17 +166,6 @@
                     <label class="form-label">Harga (Rp)</label>
                     <input type="number" name="price" class="form-control" required placeholder="Contoh: 1500000 (Tanpa Titik)">
                 </div>
-            </div>
-
-            <div class="form-group" id="bungkus-durasi">
-                <label class="form-label">Durasi Pemotretan</label>
-                <select name="duration" id="input-durasi" class="form-control" required>
-                    <option value="">-- Pilih Durasi --</option>
-                    <option value="1 Jam" {{ old('duration') == '1 Jam' ? 'selected' : '' }}>1 Jam (Standar Sesi Studio)</option>
-                    <option value="Seharian" {{ old('duration') == 'Seharian' ? 'selected' : '' }}>Seharian (Full Day / Prewed)</option>
-                    <option value="-" {{ old('duration') == '-' ? 'selected' : '' }}>- (Khusus Paket Cetak Foto)</option>
-                </select>
-                <span class="form-text">💡 Pilih durasi. Sesi studio otomatis dikunci 1 Jam di kalender reservasi.</span>
             </div>
 
             <div class="form-group">
@@ -199,19 +190,12 @@
 <script>
     function aturDurasi() {
         let kategori = document.getElementById('kategori').value;
-        let bungkusDurasi = document.getElementById('bungkus-durasi');
         let inputDurasi = document.getElementById('input-durasi');
 
         if (kategori === 'cetak') {
-            bungkusDurasi.style.display = 'none';
-            inputDurasi.removeAttribute('required');
             inputDurasi.value = '-';
         } else {
-            bungkusDurasi.style.display = 'block';
-            inputDurasi.setAttribute('required', 'required');
-            if(inputDurasi.value === '-') {
-                inputDurasi.value = '';
-            }
+            inputDurasi.value = '45 Menit';
         }
     }
 

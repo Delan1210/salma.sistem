@@ -2,9 +2,6 @@
 
 @section('content')
 <style>
-    /* =========================================
-       CSS KHUSUS TENTANG KAMI (TEMA TWILIGHT)
-       ========================================= */
     .about-header {
         text-align: center;
         padding: 60px 20px;
@@ -164,7 +161,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background-color: #3A3959; /* Menggunakan Deep Muted Navy */
+        background-color: #3A3959;
         color: #EAEBE6 !important;
         padding: 12px 35px;
         border-radius: 50px;
@@ -176,7 +173,7 @@
     }
 
     .btn-maps:hover {
-        background-color: #22222E; /* Berubah jadi Dark Slate saat dihover */
+        background-color: #22222E;
         transform: scale(1.05);
     }
 
@@ -206,16 +203,16 @@
     <div class="story-text">
         <h2>Cerita Kami</h2>
         <p>
-            Berawal dari sebuah passion sederhana untuk mengabadikan momen, <strong>Salma Photography</strong> kini telah berkembang menjadi salah satu studio fotografi profesional di Banjarmasin yang fokus pada kualitas, estetika, dan kepuasan pelanggan.
+            <strong>Salma Studio</strong> adalah salah satu perusahaan yang bergerak dibidang jasa foto studio dan penjualan barang-barang yang berhubungan dengan foto.
         </p>
         <p>
-            Kami percaya bahwa setiap senyuman, tawa, dan tatapan memiliki ceritanya masing-masing. Oleh karena itu, kami merancang ruang studio yang nyaman dengan nuansa *aesthetic* kekinian, didukung oleh peralatan standar industri, agar Anda bisa mengekspresikan diri dengan bebas dan percaya diri.
+            Salma Studio didirikan pada awal tahun 2002 dengan tujuan memaksimalkan dan memberdayagunakan seluruh potensi dan kemampuan yang dimiliki oleh pendirinya, yang lahir dari latar belakang dunia foto studio, akan tetapi telah memiliki pengalaman di dalam dunia foto studio.
         </p>
     </div>
 
     <div class="story-image">
         <!-- Pastikan file gambar ini ada di folder public/images kamu -->
-        <img src="{{ asset('images/hero-studio.jpg') }}" alt="Studio Salma Photography">
+        <img src="{{ asset('images/logo-salma.png') }}" alt="Studio Salma Photography">
     </div>
 </div>
 

@@ -130,8 +130,8 @@
                         <tr>
                             <th style="width: 5%; text-align: center;">No</th>
                             <th style="width: 18%;">Nama Paket</th>
-                            <th style="width: 12%; text-align: center;">Kategori</th>
-                            <th style="width: 30%;">Deskripsi Singkat</th>
+                            <th style="width: 15%; text-align: center;">Kategori</th>
+                            <th style="width: 27%;">Deskripsi Singkat</th>
                             <th style="width: 15%;">Harga</th>
                             <th style="width: 10%;">Durasi</th>
                             <th style="width: 10%; text-align: center;">Aksi</th>
@@ -143,7 +143,9 @@
                                 <td align="center" style="font-weight: 600; color: #706F8E;">{{ $index + 1 }}</td>
                                 <td style="font-weight: 800; color: #3A3959; font-size: 15.5px;">{{ $package->name }}</td>
                                 <td align="center">
-                                    <span class="badge-category">{{ $package->category }}</span>
+                                    <span class="badge-category">
+                                        {{ $package->category == 'photography' ? '📸 Fotografi' : '🖨️ Cetak Foto' }}
+                                    </span>
                                 </td>
                                 <td style="color: #706F8E; font-size: 13.5px; line-height: 1.5;">
                                     {{ \Illuminate\Support\Str::limit($package->description, 60) }}
@@ -152,7 +154,11 @@
                                     Rp {{ number_format($package->price, 0, ',', '.') }}
                                 </td>
                                 <td style="font-weight: 600; color: #3A3959;">
-                                    ⌛ {{ $package->duration }}
+                                    @if($package->duration == '-')
+                                        <span style="color: #ADA9BA; font-style: italic; font-size: 13px;">(Tidak Ada)</span>
+                                    @else
+                                        ⌛ {{ $package->duration }}
+                                    @endif
                                 </td>
                                 <td align="center">
                                     <div style="display: flex; gap: 8px; justify-content: center;">
