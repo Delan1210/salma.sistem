@@ -176,7 +176,7 @@
             <div class="form-group">
                 <label class="form-label">Foto Contoh Paket (Opsional)</label>
                 <input type="file" name="image" accept="image/*" class="form-control" style="padding: 11px 15px; background-color: #ffffff;">
-                <span class="form-text">Format yang didukung: JPG, PNG, JPEG. Maksimal ukuran 2MB.</span>
+                <span class="form-text">Format yang didukung: JPG, PNG, JPEG. Maksimal ukuran 8MB.</span>
             </div>
 
             <div style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #EAEBE6; display: flex; align-items: center;">

@@ -84,7 +84,14 @@
 
             <div class="payment-box">
                 <h4 style="margin-top: 0; color: #3A3959; margin-bottom: 10px; font-weight: 800;">💳 Informasi Pembayaran</h4>
-                <p style="font-size: 14px; color: #22222E; margin-bottom: 20px;">Silakan selesaikan pembayaran sebesar <strong style="color: #27ae60; font-size: 16px;">Rp {{ number_format($package->price, 0, ',', '.') }}</strong> dengan melakukan <i>scan</i> QRIS di bawah ini:</p>
+                <p style="font-size: 14px; color: #22222E; margin-bottom: 15px;">Silakan selesaikan pembayaran sebesar <strong style="color: #27ae60; font-size: 16px;">Rp {{ number_format($package->price, 0, ',', '.') }}</strong>* dengan melakukan <i>scan</i> QRIS di bawah ini:</p>
+
+                <div style="background-color: #FFF9C4; border-left: 4px solid #FBC02D; padding: 12px 15px; text-align: left; margin-bottom: 20px; border-radius: 6px; font-size: 13px; color: #5D4037; line-height: 1.5;">
+                    <strong>*PENTING (Jika Ada Tambahan Orang):</strong><br>
+                    Harga di atas adalah harga dasar paket. Jika ada tambahan (sesuai dengan deskripsi paket), mohon tambahkan manual ke total transfer Anda. <br>
+                    <i>Contoh: Tambah 2 orang = transfer harga dasar + Rp 20.000.</i><br>
+                    <b>Wajib tulis rincian tambahan di kolom "Catatan" di bawah.</b>
+                </div>
 
                 <div style="display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap;">
                     <img src="{{ asset('images/qris-studio.png') }}" alt="QRIS" style="max-width: 180px; border-radius: 12px; box-shadow: 0 4px 15px rgba(34, 34, 46, 0.1);">

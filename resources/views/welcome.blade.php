@@ -24,8 +24,8 @@
     .hero-bg {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
-        /* Pastikan file kompilasi.gif ada di folder public/images */
-        background-image: url('{{ asset("images/kompilasi.gif") }}');
+        /* Pastikan file merge.gif ada di folder public/images */
+        background-image: url('{{ asset("images/merged.gif") }}');
         background-size: cover;
         background-position: center;
         z-index: 1;

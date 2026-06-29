@@ -28,7 +28,7 @@ class PackageController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'duration' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:8500'
         ]);
 
         $data = $request->all();
@@ -58,7 +58,7 @@ class PackageController extends Controller
             'description' => 'required',
             'price' => 'required|numeric',
             'duration' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:8548'
         ]);
 
         $data = $request->all();
