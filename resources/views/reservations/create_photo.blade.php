@@ -87,7 +87,7 @@
                 <p style="font-size: 14px; color: #22222E; margin-bottom: 15px;">Silakan selesaikan pembayaran sebesar <strong style="color: #27ae60; font-size: 16px;">Rp {{ number_format($package->price, 0, ',', '.') }}</strong>* dengan melakukan <i>scan</i> QRIS di bawah ini:</p>
 
                 <div style="background-color: #FFF9C4; border-left: 4px solid #FBC02D; padding: 12px 15px; text-align: left; margin-bottom: 20px; border-radius: 6px; font-size: 13px; color: #5D4037; line-height: 1.5;">
-                    <strong>*PENTING (Jika Ada Tambahan Orang):</strong><br>
+                    <strong>*PENTING (Jika Ada Tambahan):</strong><br>
                     Harga di atas adalah harga dasar paket. Jika ada tambahan (sesuai dengan deskripsi paket), mohon tambahkan manual ke total transfer Anda. <br>
                     <i>Contoh: Tambah 2 orang = transfer harga dasar + Rp 20.000.</i><br>
                     <b>Wajib tulis rincian tambahan di kolom "Catatan" di bawah.</b>
