@@ -18,10 +18,10 @@
         @endif
 
         <div style="background-color: #e2f3f5; padding: 15px; border-left: 5px solid #17a2b8; margin-bottom: 20px; border-radius: 4px;">
-            <strong style="color: #0c5460;">💳 Informasi Pembayaran:</strong><br>
-            <span style="color: #333;">Silakan transfer pembayaran sesuai harga paket ke rekening berikut:</span><br>
-            <strong style="font-size: 16px; color: #0056b3;">BCA: 1234567890 a.n. Salma Photography</strong><br>
-            <span style="color: #333; font-size: 14px;">Jika sudah transfer, segera upload bukti pembayaran pada tabel di bawah ini agar pesanan dapat dikonfirmasi.</span>
+            <strong style="color: #0c5460;">💳 Informasi Paket:</strong><br>
+            <span style="color: #333;">Pastikan pembayaran sudah sesuai dengan harga katalog yang dipilih. Jika dirasa ingin mengubah paket, silakan hubungi admin.</span><br>
+            <strong style="font-size: 16px; color: #0056b3;">Admin: +62 822-5552-4446 a.n. Salma Photography atau klik logo WhatsApp bagian paling baawah.</strong><br>
+            <span style="color: #333; font-size: 14px;">Tolong jika ingin melakukan perubahan harap menghubungi admin minimal 24 jam sebelum tanggal reservasi.</span>
         </div>
 
         <div style="overflow-x: auto;">
