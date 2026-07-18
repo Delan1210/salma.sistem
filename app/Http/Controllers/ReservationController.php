@@ -15,7 +15,15 @@ class ReservationController extends Controller
     {
         // Ambil semua reservasi milik user yang sedang login
         $reservations = Reservation::where('user_id', Auth::id())->get();
-        return view('reservations.index', compact('reservations'));
+
+        // FIX ERROR: Ambil 3 paket paling laku untuk ditampilkan di halaman riwayat
+        $featuredPackages = Package::withCount('reservations')
+            ->orderByDesc('reservations_count')
+            ->take(3)
+            ->get();
+
+        // Kirim $reservations dan $featuredPackages ke tampilan
+        return view('reservations.index', compact('reservations', 'featuredPackages'));
     }
 
     // menampilkan form reservasi untuk paket tertentu
@@ -81,14 +89,19 @@ class ReservationController extends Controller
     // menyimpan data reservasi baru
     public function store(Request $request)
     {
+        // REVISI SIDANG: Menambahkan 'after_or_equal:tomorrow' pada reservation_date
+        // Agar pelanggan hanya bisa booking minimal H-1 (besok dan seterusnya)
         $request->validate([
             'package_id' => 'required|exists:packages,id',
-            'reservation_date' => 'required|date',
+            'reservation_date' => 'required|date|after_or_equal:tomorrow',
             'reservation_time' => 'nullable',
             'location' => 'nullable|string',
             'gdrive_link' => 'nullable|url',
             'notes' => 'nullable|string',
             'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:5048',
+        ], [
+            // Kustomisasi pesan error agar lebih ramah untuk user
+            'reservation_date.after_or_equal' => 'Pemesanan maksimal H-1. Silakan pilih tanggal besok atau hari berikutnya ya!'
         ]);
 
         $package = Package::findOrFail($request->package_id);
@@ -99,7 +112,7 @@ class ReservationController extends Controller
             $bookingTime .= ':00';
         }
 
-        // ATPAM ANTI DOUBLE BOOKING KHUSUS FOTOGRAFI (1 JAM BLOKIR)
+        // SATPAM ANTI DOUBLE BOOKING KHUSUS FOTOGRAFI (1 JAM BLOKIR)
         if ($package->category == 'photography' && $bookingTime) {
 
             $waktuMulai = Carbon::parse($bookingTime);
@@ -132,7 +145,8 @@ class ReservationController extends Controller
         ];
 
         if ($request->hasFile('payment_proof')) {
-            $data['payment_proof'] = $request->file('payment_proof')->store('payments', 'public');
+            // Menyimpan secara private ke folder 'payments'
+            $data['payment_proof'] = $request->file('payment_proof')->store('payments');
         }
 
         Reservation::create($data);
@@ -155,8 +169,8 @@ class ReservationController extends Controller
         }
 
         if ($request->hasFile('payment_proof')) {
-            // Simpan ke folder storage/app/public/payment_proofs
-            $path = $request->file('payment_proof')->store('payment_proofs', 'public');
+            // REVISI: Simpan ke folder 'payments' secara private (tanpa 'public')
+            $path = $request->file('payment_proof')->store('payments');
 
             // Simpan nama path ke database
             $reservation->update(['payment_proof' => $path]);

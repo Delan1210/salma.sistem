@@ -4,261 +4,191 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     /* ==========================================
-       HERO BANNER & PENGUMUMAN STUDIO (BARU)
+       ANIMASI GLOBAL & KESELURUHAN
+       ========================================== */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+
+    .section-title {
+        color: #3A3959; font-size: 2.8rem; font-weight: 800; margin-bottom: 10px;
+        letter-spacing: -0.5px;
+    }
+    .section-subtitle {
+        color: #706F8E; font-size: 1.15rem; margin-bottom: 40px; font-weight: 500;
+    }
+
+    /* ==========================================
+       HERO BANNER & PENGUMUMAN STUDIO
        ========================================== */
     .hero-banner {
-        position: relative;
-        width: 100%;
-        min-height: 80vh;
-        border-radius: 24px; /* Membuat sudut membulat elegan */
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: -10px;
-        margin-bottom: 60px;
-        box-shadow: 0 15px 40px rgba(34, 34, 46, 0.15);
+        position: relative; width: 100%; min-height: 85vh;
+        border-radius: 30px; overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+        margin-top: -10px; box-shadow: 0 20px 50px rgba(34, 34, 46, 0.15);
     }
-
-    /* Background GIF kompilasi */
     .hero-bg {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        /* Pastikan file merge.gif ada di folder public/images */
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background-image: url('{{ asset("images/merged.gif") }}');
-        background-size: cover;
-        background-position: center;
-        z-index: 1;
+        background-size: cover; background-position: center; z-index: 1;
     }
-
-    /* Overlay gelap agar teks & kotak kaca terlihat jelas */
     .hero-overlay {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(to bottom, rgba(58, 57, 89, 0.6), rgba(34, 34, 46, 0.85));
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(135deg, rgba(34, 34, 46, 0.9) 0%, rgba(58, 57, 89, 0.6) 100%);
         z-index: 2;
     }
-
     .hero-content {
-        position: relative;
-        z-index: 3;
-        text-align: center;
-        color: #EAEBE6;
-        padding: 20px;
-        width: 100%;
-        max-width: 800px;
+        position: relative; z-index: 3; text-align: center; color: #EAEBE6;
+        padding: 20px; width: 100%; max-width: 800px;
     }
-
     .hero-title {
-        font-family: 'Georgia', serif;
-        font-size: 3.8rem;
-        font-weight: 800;
-        margin: 0 0 15px 0;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 4.2rem; font-weight: 900; margin: 0 0 10px 0;
+        text-shadow: 0 10px 20px rgba(0,0,0,0.3); letter-spacing: -1px;
     }
-
     .hero-subtitle {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 35px;
-        color: #ADA9BA;
-        letter-spacing: 2px;
+        font-size: 1.3rem; font-weight: 500; margin-bottom: 40px; color: #dcdde1; letter-spacing: 3px;
     }
 
-    /* Kotak Pengumuman Kaca (Glassmorphism) */
+    /* Glassmorphism Floating Box */
     .announcement-box {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 35px;
-        border-radius: 20px;
-        display: inline-block;
-        text-align: left;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.15); border-top: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 40px; border-radius: 24px; display: inline-block; text-align: left;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        animation: float 6s ease-in-out infinite;
     }
-
     .announce-title {
-        font-size: 1.4rem;
-        font-weight: 800;
-        text-align: center;
-        margin: 0 0 20px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        padding-bottom: 15px;
-        letter-spacing: 1px;
-        color: #ffffff;
+        font-size: 1.3rem; font-weight: 800; text-align: center; margin: 0 0 25px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15); padding-bottom: 15px; color: #ffffff;
     }
-
-    .schedule-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        gap: 15px 25px;
-        font-size: 1.1rem;
-    }
-
-    .schedule-label { font-weight: bold; color: #EAEBE6; }
-    .schedule-time { color: #f1c40f; font-weight: bold; } /* Warna kuning terang */
-
+    .schedule-grid { display: grid; grid-template-columns: auto 1fr; gap: 15px 25px; font-size: 1.1rem; }
+    .schedule-label { font-weight: 600; color: #EAEBE6; }
+    .schedule-time { color: #f1c40f; font-weight: 800; }
     .location-info {
-        margin-top: 25px;
-        text-align: center;
-        font-size: 1rem;
-        color: #EAEBE6;
-        line-height: 1.6;
-        font-weight: 500;
+        margin-top: 30px; text-align: center; font-size: 1rem; color: #dcdde1;
+        line-height: 1.6; font-weight: 500; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px;
     }
 
-    /* CUSTOM CSS UNTUK FLATPICKR (Asli milikmu) */
+    /* ==========================================
+       SECTION PAKET FAVORIT
+       ========================================== */
+    .home-featured-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px; max-width: 1200px; margin: 0 auto; padding: 20px;
+    }
+    .home-package-card {
+        background: #ffffff; border-radius: 24px; overflow: hidden;
+        box-shadow: 0 10px 30px rgba(58, 57, 89, 0.05); display: flex; flex-direction: column;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(173, 169, 186, 0.15);
+    }
+    .home-package-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(58, 57, 89, 0.12); }
+    .home-img-wrapper { width: 100%; height: 220px; overflow: hidden; }
+    .home-package-img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .home-package-card:hover .home-package-img { transform: scale(1.08); }
+
+    .home-package-body { padding: 25px; display: flex; flex-direction: column; flex: 1; position: relative; }
+    .home-package-title { color: #3A3959; font-size: 1.4rem; font-weight: 800; margin: 0 0 5px 0; }
+    .home-package-price { color: #27ae60; font-weight: 800; font-size: 1.2rem; margin-bottom: 10px; }
+
+    .home-favorite-badge {
+        position: absolute; top: -15px; right: 20px;
+        background: linear-gradient(135deg, #ff7675, #e74c3c); color: white;
+        padding: 6px 16px; border-radius: 50px; font-weight: 800; font-size: 0.75rem;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3); border: 2px solid #fff;
+    }
+
+    .home-btn-book {
+        background: #3A3959; color: white; padding: 12px; border-radius: 50px;
+        text-decoration: none; font-weight: bold; text-align: center;
+        display: block; transition: 0.3s; margin-top: auto;
+    }
+    .home-btn-book:hover { background: #706F8E; box-shadow: 0 5px 15px rgba(112, 111, 142, 0.3); }
+
+    /* ==========================================
+       SECTION KALENDER (Anti-Benjot)
+       ========================================== */
+    .calendar-wrapper {
+        background: #ffffff; max-width: 800px; margin: 0 auto;
+        padding: 40px; border-radius: 30px; box-shadow: 0 20px 50px rgba(34, 34, 46, 0.05);
+        border: 1px solid rgba(173, 169, 186, 0.2);
+    }
     .flatpickr-calendar {
-        background: #ffffff;
+        background: #ffffff !important;
         border: none !important;
         box-shadow: 0 10px 40px rgba(34, 34, 46, 0.08) !important;
         border-radius: 20px !important;
         padding: 15px !important;
-        width: 340px !important;
+        width: 340px !important; /* Mengunci ukuran agar tidak gepeng */
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0 auto;
     }
-
-    .flatpickr-month {
-        color: #3A3959 !important;
-        font-weight: 800;
-        margin-bottom: 10px;
-    }
-
+    .flatpickr-month { color: #3A3959 !important; font-weight: 800; margin-bottom: 10px; }
     .flatpickr-current-month .flatpickr-monthDropdown-months,
-    .flatpickr-current-month input.cur-year {
-        font-weight: 800 !important;
-        font-size: 1.2rem;
-    }
+    .flatpickr-current-month input.cur-year { font-weight: 800 !important; font-size: 1.2rem; }
+    .flatpickr-prev-month svg, .flatpickr-next-month svg { fill: #3A3959 !important; }
+    span.flatpickr-weekday { color: #706F8E !important; font-weight: 800; font-size: 0.9rem; }
+    .flatpickr-day { border-radius: 12px !important; color: #22222E; font-weight: 600; margin: 2px !important; transition: transform 0.2s; }
+    .flatpickr-day:hover { transform: scale(1.1); }
+    .flatpickr-day.today { background: #ADA9BA !important; border-color: #ADA9BA !important; color: #ffffff !important; }
+    .flatpickr-day.fully-booked { background-color: #ffe8e8 !important; color: #e74c3c !important; text-decoration: line-through; font-weight: 800; border-color: transparent !important; }
+    .flatpickr-day.partially-booked { background-color: #fff3cd !important; color: #d35400 !important; font-weight: 800; border-color: #ffeeba !important; }
 
-    .flatpickr-prev-month svg, .flatpickr-next-month svg {
-        fill: #3A3959 !important;
+    /* ==========================================
+       SECTION MENGAPA KAMI
+       ========================================== */
+    .feature-card {
+        flex: 1; min-width: 260px; background: #ffffff; padding: 40px 30px;
+        border-radius: 24px; box-shadow: 0 10px 30px rgba(34, 34, 46, 0.05);
+        border: 1px solid rgba(173,169,186,0.15); text-align: center;
+        transition: transform 0.3s ease;
     }
-
-    span.flatpickr-weekday {
-        color: #706F8E !important;
-        font-weight: 800;
-        font-size: 0.9rem;
+    .feature-card:hover { transform: translateY(-10px); border-color: #3A3959; }
+    .feature-icon-wrapper {
+        width: 80px; height: 80px; background: rgba(58, 57, 89, 0.08);
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 2rem; margin: 0 auto 20px; transition: transform 0.3s;
     }
+    .feature-card:hover .feature-icon-wrapper { transform: scale(1.1) rotate(5deg); background: #3A3959; color: white; }
 
-    .flatpickr-day {
-        border-radius: 12px !important;
-        color: #22222E;
-        font-weight: 600;
-        margin: 2px !important;
-        transition: transform 0.2s;
-    }
-
-    .flatpickr-day:hover {
-        transform: scale(1.1);
-    }
-
-    .flatpickr-day.today {
-        background: #ADA9BA !important;
-        border-color: #ADA9BA !important;
-        color: #ffffff !important;
-    }
-
-    .flatpickr-day.fully-booked {
-        background-color: #ffe8e8 !important;
-        color: #e74c3c !important;
-        text-decoration: line-through;
-        font-weight: 800;
-        border-color: transparent !important;
-    }
-
-    .flatpickr-day.partially-booked {
-        background-color: #fff3cd !important;
-        color: #d35400 !important;
-        font-weight: 800;
-        border-color: #ffeeba !important;
-    }
-
-    /* CSS KHUSUS UNTUK GALERI INSPIRASI (Asli milikmu) */
+    /* ==========================================
+       GALERI INSPIRASI
+       ========================================== */
     .galeri-inspirasi {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        padding: 80px 5%;
-        gap: 50px;
-        background-color: #ffffff;
-        border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(34, 34, 46, 0.05);
-        margin-top: 40px;
+        display: flex; flex-wrap: wrap; align-items: center; padding: 80px 5%;
+        gap: 60px; background-color: #ffffff; border-radius: 30px;
+        box-shadow: 0 20px 50px rgba(34, 34, 46, 0.05); margin-top: 60px;
     }
-
-    .galeri-text {
-        flex: 1;
-        min-width: 300px;
-    }
-
-    .galeri-text h2 {
-        font-size: 3.5rem;
-        font-weight: 800;
-        color: #3A3959;
-        line-height: 1.2;
-        margin-bottom: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .galeri-text p {
-        font-size: 1.2rem;
-        color: #22222E;
-        margin-bottom: 30px;
-        line-height: 1.6;
-    }
-
+    .galeri-text { flex: 1; min-width: 300px; }
+    .galeri-text p { font-size: 1.15rem; color: #706F8E; margin-bottom: 35px; line-height: 1.7; }
     .btn-inspirasi {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background-color: #3A3959;
-        color: #EAEBE6 !important;
-        padding: 15px 35px;
-        border-radius: 50px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.1rem;
-        transition: transform 0.2s, background-color 0.2s;
+        display: inline-flex; align-items: center; gap: 10px;
+        background-color: #3A3959; color: #ffffff !important; padding: 16px 40px;
+        border-radius: 50px; text-decoration: none; font-weight: 800; font-size: 1.1rem;
+        transition: all 0.3s; box-shadow: 0 10px 20px rgba(58, 57, 89, 0.2);
     }
+    .btn-inspirasi:hover { transform: translateY(-5px); background-color: #22222E; box-shadow: 0 15px 25px rgba(34, 34, 46, 0.3); }
 
-    .btn-inspirasi:hover {
-        transform: scale(1.05);
-        background-color: #706F8E;
-    }
+    .galeri-grid { flex: 1; min-width: 300px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: center; }
+    .galeri-item { width: 100%; overflow: hidden; border-radius: 20px; box-shadow: 0 10px 20px rgba(34, 34, 46, 0.1); }
+    .galeri-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); aspect-ratio: 4/5; display: block; }
+    .galeri-item:hover img { transform: scale(1.1); }
 
-    .galeri-grid {
-        flex: 1;
-        min-width: 300px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
-
-    .galeri-item {
-        width: 100%;
-        aspect-ratio: 4/5;
-        overflow: hidden;
-        border-radius: 20px;
-        box-shadow: 0 4px 10px rgba(34, 34, 46, 0.15);
-    }
-
-    .galeri-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s;
-    }
-
-    .galeri-item:hover img {
-        transform: scale(1.1);
-    }
+    .galeri-grid .galeri-item:nth-child(even) { transform: translateY(30px); }
 
     @media (max-width: 768px) {
-        .galeri-text h2 { font-size: 2.4rem; }
-        .galeri-inspirasi { padding: 50px 5%; text-align: center; }
+        .hero-title { font-size: 2.8rem; }
+        .galeri-inspirasi { padding: 50px 20px; text-align: center; }
         .schedule-grid { grid-template-columns: 1fr; gap: 5px; text-align: center; }
         .schedule-label { margin-top: 10px; }
+        .galeri-grid .galeri-item:nth-child(even) { transform: translateY(0); }
     }
 </style>
 
@@ -292,65 +222,119 @@
     </div>
 </div>
 
-<div style="padding: 40px 0; text-align: center;">
-    <h2 style="margin-bottom: 15px; color: #3A3959; font-size: 2.5rem; font-weight: 800;">Cek Ketersediaan Jadwal Studio</h2>
-
-    <p style="margin-bottom: 40px; color: #22222E; font-size: 1.1rem;">
-        Tanggal <b style="color: #e74c3c;">merah dicoret</b> berarti <i>Full Booked</i>.<br>
-        Tanggal <b style="color: #d35400;">kuning/orange</b> berarti masih ada jam kosong. <b>Klik tanggal</b> untuk melihat detail.
-    </p>
-
-    <div style="display: flex; justify-content: center;">
-        <div id="calendar-display"></div>
+<!-- ==========================================
+     SECTION PAKET FAVORIT (3 ITEM)
+     ========================================== -->
+<div style="padding: 80px 20px; background-color: #FAF9F5; margin: 0 -20px 60px -20px; border-radius: 40px;">
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h2 class="section-title">Pilihan Favorit Pelanggan</h2>
+        <p class="section-subtitle">Paket terlaris yang paling sering dipesan untuk mengabadikan momen spesial.</p>
     </div>
 
-    <div style="margin-top: 40px;">
-        @auth
-            <a href="{{ route('catalog') }}" style="display: inline-block; background: #3A3959; color: #EAEBE6; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(58,57,89,0.2);" onmouseover="this.style.backgroundColor='#706F8E';" onmouseout="this.style.backgroundColor='#3A3959';">
-                Booking Sekarang &rarr;
-            </a>
-        @else
-            <a href="{{ route('login') }}" style="display: inline-block; background: #3A3959; color: #EAEBE6; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 4px 15px rgba(58,57,89,0.2);" onmouseover="this.style.backgroundColor='#706F8E';" onmouseout="this.style.backgroundColor='#3A3959';">
-                Ingin booking? Login / Daftar sekarang &rarr;
-            </a>
-        @endauth
-    </div>
-</div>
+    <div class="home-featured-grid">
+        @foreach($featuredPackages as $package)
+            <div class="home-package-card">
+                <div class="home-img-wrapper">
+                    <img src="{{ asset('storage/' . $package->image) }}" class="home-package-img" alt="{{ $package->name }}">
+                </div>
+                <div class="home-package-body">
+                    <div class="home-favorite-badge">💖 Paling Laku</div>
 
-<div style="padding: 60px 0; text-align: center;">
-    <h2 style="margin-bottom: 50px; color: #3A3959; font-size: 2.5rem; font-weight: 800;">Mengapa Memilih Kami?</h2>
-    <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
-        <div style="flex: 1; min-width: 250px; background: #ffffff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(34, 34, 46, 0.05); border: 1px solid rgba(173,169,186,0.2);">
-            <h3 style="color: #22222E; font-size: 1.5rem; margin-bottom: 15px;">📸 Peralatan Modern</h3>
-            <p style="color: #706F8E; line-height: 1.6;">Menggunakan kamera dan lighting standar industri untuk hasil maksimal.</p>
-        </div>
-        <div style="flex: 1; min-width: 250px; background: #ffffff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(34, 34, 46, 0.05); border: 1px solid rgba(173,169,186,0.2);">
-            <h3 style="color: #22222E; font-size: 1.5rem; margin-bottom: 15px;">👨‍🎨 Berpengalaman</h3>
-            <p style="color: #706F8E; line-height: 1.6;">Tim fotografer yang ahli menangkap sudut terbaik dan mengarahkan gaya anda.</p>
-        </div>
-        <div style="flex: 1; min-width: 250px; background: #ffffff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(34, 34, 46, 0.05); border: 1px solid rgba(173,169,186,0.2);">
-            <h3 style="color: #22222E; font-size: 1.5rem; margin-bottom: 15px;">🖨️ Hasil Cetak Tajam</h3>
-            <p style="color: #706F8E; line-height: 1.6;">Teknologi cetak terkini dengan akurasi warna tinggi dan kertas premium.</p>
-        </div>
+                    <h3 class="home-package-title">{{ $package->name }}</h3>
+                    <p class="home-package-price">Rp {{ number_format($package->price, 0, ',', '.') }}</p>
+
+                    <p style="font-size: 13px; color: #7f8c8d; margin-bottom: 20px; font-weight: 600;">
+                        <span style="color: #f39c12;">★</span> Telah dipesan {{ $package->reservations_count ?? 0 }} kali
+                    </p>
+
+                    <a href="{{ route('reservations.create', ['package_id' => $package->id]) }}" class="home-btn-book">Reservasi Sekarang</a>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    <div style="text-align: center; margin-top: 50px;">
+        <a href="{{ route('catalog') }}" style="color: #3A3959; font-weight: 800; text-decoration: none; border-bottom: 2px solid #3A3959; padding-bottom: 5px; font-size: 1.15rem; transition: 0.3s;" onmouseover="this.style.color='#706F8E'; this.style.borderColor='#706F8E';" onmouseout="this.style.color='#3A3959'; this.style.borderColor='#3A3959';">Jelajahi Semua Katalog &rarr;</a>
     </div>
 </div>
 
+<!-- ==========================================
+     SECTION KALENDER
+     ========================================== -->
+<div style="padding: 40px 20px; text-align: center;">
+    <h2 class="section-title">Cek Ketersediaan Studio</h2>
+
+    <div class="calendar-wrapper">
+        <p style="margin-bottom: 30px; color: #706F8E; font-size: 1.1rem; line-height: 1.6;">
+            Tanggal <b style="color: #e74c3c;">merah dicoret</b> berarti <i>Full Booked</i>.<br>
+            Tanggal <b style="color: #d35400;">kuning terang</b> berarti masih ada jam kosong.<br>
+            <span style="font-size: 0.95rem;">(Silakan klik pada tanggal untuk melihat detail antrian jam)</span>
+        </p>
+
+        <div style="display: flex; justify-content: center;">
+            <div id="calendar-display"></div>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #EAEBE6;">
+            @auth
+                <a href="{{ route('catalog') }}" class="btn-inspirasi" style="box-shadow: none;">
+                    Booking Tanggal Sekarang &rarr;
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="btn-inspirasi" style="box-shadow: none; background: #27ae60;">
+                    Login untuk Booking &rarr;
+                </a>
+            @endauth
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     SECTION MENGAPA KAMI
+     ========================================== -->
+<div style="padding: 80px 20px; text-align: center;">
+    <h2 class="section-title">Mengapa Memilih Kami?</h2>
+    <p class="section-subtitle">Kami mendedikasikan kualitas terbaik untuk setiap jepretan Anda.</p>
+
+    <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; max-width: 1200px; margin: 0 auto;">
+        <div class="feature-card">
+            <div class="feature-icon-wrapper">📸</div>
+            <h3 style="color: #22222E; font-size: 1.5rem; margin-bottom: 15px; font-weight: 800;">Peralatan Modern</h3>
+            <p style="color: #706F8E; line-height: 1.6;">Kami menggunakan perlengkapan kamera dan lighting standar profesional untuk menghasilkan detail foto yang sempurna.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon-wrapper">👨‍🎨</div>
+            <h3 style="color: #22222E; font-size: 1.5rem; margin-bottom: 15px; font-weight: 800;">Berpengalaman</h3>
+            <p style="color: #706F8E; line-height: 1.6;">Tim fotografer kami sangat ahli dalam menangkap angle terbaik dan siap membantu mengarahkan gaya andalanmu.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon-wrapper">🖨️</div>
+            <h3 style="color: #22222E; font-size: 1.5rem; margin-bottom: 15px; font-weight: 800;">Hasil Cetak Tajam</h3>
+            <p style="color: #706F8E; line-height: 1.6;">Didukung oleh mesin cetak mutakhir, memastikan akurasi warna yang tinggi dan tahan lama pada kertas premium.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================
+     SECTION GALERI INSPIRASI (4 ITEM, TANPA CETAK FOTO)
+     ========================================== -->
 <div class="galeri-inspirasi">
     <div class="galeri-text">
-        <h2>Our Best Moments.</h2>
+        <h2 class="section-title" style="text-align: left; font-size: 3.5rem;">Our Best Moments.</h2>
         <p>
             Setiap senyuman punya ceritanya sendiri. Intip bagaimana kami mengabadikan momen-momen berharga dengan sentuhan aesthetic khas Salma Photography.
         </p>
         <a href="https://instagram.com/photographsalma" target="_blank" class="btn-inspirasi">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
             </svg>
-            Lihat Karya Lainnya di IG
+            Jelajahi Karya Kami
         </a>
     </div>
 
     <div class="galeri-grid">
-        @foreach($featuredPackages as $package)
+        <!-- SEKARANG MENGGUNAKAN $galleryPackages -->
+        @foreach($galleryPackages as $package)
             <div class="galeri-item">
                 <img src="{{ asset('storage/' . $package->image) }}" alt="{{ $package->name }}">
             </div>
@@ -363,7 +347,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Tangkap data array pintar dari Controller
         let bookedData = @json($bookedDatesData ?? []);
 
         flatpickr("#calendar-display", {
@@ -371,7 +354,6 @@
             minDate: "today",
             dateFormat: "Y-m-d",
 
-            // Warnai tanggal sesuai status (full atau partial)
             onDayCreate: function(dObj, dStr, fp, dayElem) {
                 let dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
 
@@ -383,12 +365,10 @@
                     } else if (info.status === 'partial') {
                         dayElem.classList.add('partially-booked');
                     }
-
                     dayElem.title = "Klik untuk lihat detail jadwal";
                 }
             },
 
-            // Munculkan Pop-up SweetAlert saat tanggal diklik
             onChange: function(selectedDates, dateStr, instance) {
                 if (bookedData[dateStr]) {
                     let info = bookedData[dateStr];
@@ -407,15 +387,17 @@
                         `,
                         icon: info.status === 'full' ? 'error' : 'info',
                         confirmButtonText: 'Tutup',
-                        confirmButtonColor: '#3A3959'
+                        confirmButtonColor: '#3A3959',
+                        backdrop: `rgba(34, 34, 46, 0.7)`
                     });
                 } else {
                      Swal.fire({
-                        title: `Jadwal Tgl ${dateStr}`,
+                        title: `Tersedia! (Tgl ${dateStr})`,
                         text: "Studio masih kosong seharian! Silakan booking dari jam 09:00 - 21:00.",
                         icon: 'success',
                         confirmButtonText: 'Mantap!',
-                        confirmButtonColor: '#27ae60'
+                        confirmButtonColor: '#27ae60',
+                        backdrop: `rgba(34, 34, 46, 0.7)`
                     });
                 }
             }

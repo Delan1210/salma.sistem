@@ -138,7 +138,7 @@
         .status-pending { background-color: #FFF9E6; color: #D35400; }
         .status-confirmed { background-color: #EBF5FF; color: #2980b9; }
         .status-completed { background-color: #EBF7EE; color: #27ae60; }
-        .status-cancelled { background-color: #FFECEB; color: #c0392b; }
+        .status-finished { background-color: #FFECEB; color: #3A3959; }
 
         /* Tombol */
         .btn-action {
@@ -167,12 +167,10 @@
            CSS KHUSUS SAAT DICETAK (PRINT MEDIA)
            ========================================== */
         @media print {
-            /* 1. Sembunyikan elemen yang tidak perlu dicetak */
             .no-print, .filter-card, .btn-action, .hide-on-print {
                 display: none !important;
             }
 
-            /* 2. Reset Margin & Padding agar full kertas */
             body, .dashboard-container, .main-content {
                 background-color: white !important;
                 margin: 0 !important;
@@ -187,41 +185,36 @@
                 margin: 0 !important;
             }
 
-            /* 3. Format Tabel Formal Kertas Tinta Hitam */
             .admin-table {
                 width: 100% !important;
                 border: 1px solid #000 !important;
             }
             .admin-table th, .admin-table td {
-                border: 1px solid #000 !important; /* Garis hitam tebal ala tabel skripsi/laporan formal */
+                border: 1px solid #000 !important;
                 padding: 10px !important;
                 color: #000 !important;
                 background-color: transparent !important;
             }
             .admin-table th {
-                background-color: #f0f0f0 !important; /* Abu-abu muda untuk header tabel */
+                background-color: #f0f0f0 !important;
                 -webkit-print-color-adjust: exact;
             }
-
-            /* Teks link ubah jadi hitam polos */
             a { text-decoration: none !important; color: #000 !important; }
         }
     </style>
 
     <div class="dashboard-container">
 
-        <!-- BAGIAN 1: KOTAK FILTER (Tidak ikut ter-print) -->
+        <!-- BAGIAN 1: KOTAK FILTER -->
         <div class="filter-card no-print">
             <div class="filter-header">
                 <h3>🔍 Filter Data Laporan</h3>
                 <div style="display: flex; gap: 10px;">
-                    <!-- Tombol Cetak PDF Pintar -->
                     <button onclick="window.print()" class="btn-action btn-print">🖨️ Cetak / Save PDF</button>
                     <a href="{{ route('admin.reservations.index') }}" class="btn-action btn-outline">Kembali ke Dashboard</a>
                 </div>
             </div>
 
-            <!-- Form Pencarian (Sesuaikan action route-nya dengan aslimu ya!) -->
             <form action="{{ route('admin.reservations.report') }}" method="GET" class="form-filter-group">
                 <div class="input-group">
                     <label for="start_date">Dari Tanggal</label>
@@ -233,16 +226,38 @@
                     <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
                 </div>
 
-                <div style="display: flex; gap: 10px;">
+                <!-- TAMBAHAN: Dropdown Kategori -->
+                <div class="input-group">
+                    <label for="category">Kategori</label>
+                    <select name="category" id="category" class="form-control">
+                        <option value="">Semua Kategori</option>
+                        <option value="photography" {{ request('category') == 'photography' ? 'selected' : '' }}>Photography</option>
+                        <option value="cetak_foto" {{ request('category') == 'cetak_foto' ? 'selected' : '' }}>Cetak Foto</option>
+                    </select>
+                </div>
+
+                <!-- TAMBAHAN: Dropdown Status -->
+                <div class="input-group">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                        <!-- Menggunakan value="cancelled" tapi tampilannya "Finished" -->
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Finished</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 2px;">
                     <button type="submit" class="btn-action btn-dark">Filter Data</button>
                     <a href="{{ route('admin.reservations.report') }}" class="btn-action btn-outline">Reset</a>
                 </div>
             </form>
         </div>
 
-        <!-- BAGIAN 2: KERTAS LAPORAN (Bagian ini yang akan dicetak) -->
+        <!-- BAGIAN 2: KERTAS LAPORAN -->
         <div class="report-box">
-
             <div class="report-title-area">
                 <h2>Laporan Data Reservasi Salma Photography</h2>
                 <p>Periode:
@@ -266,12 +281,10 @@
                             <th style="width: 12%; text-align: center;">Tgl Pemotretan</th>
                             <th style="width: 13%; text-align: center;">Bukti Bayar</th>
                             <th style="width: 10%; text-align: center;">Status</th>
-                            <!-- Kolom Aksi kita sembunyikan saat di print agar kertas rapi -->
                             <th class="hide-on-print" style="width: 10%; text-align: center;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Asumsikan variabel data dari controllermu bernama $reservations -->
                         @forelse ($reservations ?? [] as $index => $reservation)
                             <tr>
                                 <td align="center" style="font-weight: 600;">{{ $index + 1 }}</td>
@@ -302,7 +315,6 @@
                                     @if (str_contains($reservation->payment_proof, 'offline'))
                                         <span>Cash / COD</span>
                                     @elseif ($reservation->payment_proof)
-                                        <!-- Teks Lihat Foto dibuat simple agar di kertas print tidak mencolok -->
                                         <a href="{{ asset('storage/' . $reservation->payment_proof) }}" target="_blank" style="color: #2980b9; font-weight: 600;">Lihat Foto</a>
                                     @else
                                         <span style="color: #706F8E;">Belum Ada</span>
@@ -310,10 +322,14 @@
                                 </td>
 
                                 <td align="center">
-                                    <span class="badge status-{{ strtolower($reservation->status) }}">{{ strtoupper($reservation->status) }}</span>
+                                    <!-- Logika untuk mengubah teks Cancelled menjadi Finished -->
+                                    @if(strtolower($reservation->status) == 'cancelled')
+                                        <span class="badge status-cancelled">FINISHED</span>
+                                    @else
+                                        <span class="badge status-{{ strtolower($reservation->status) }}">{{ strtoupper($reservation->status) }}</span>
+                                    @endif
                                 </td>
 
-                                <!-- Kolom Aksi yang akan menghilang di kertas print -->
                                 <td align="center" class="hide-on-print">
                                     <a href="{{ route('admin.reservations.index') }}" class="btn-action btn-small">Kelola</a>
                                 </td>
@@ -321,15 +337,13 @@
                         @empty
                             <tr>
                                 <td colspan="9" align="center" style="padding: 30px; color: #706F8E;">
-                                    Tidak ada data laporan untuk periode yang dipilih.
+                                    Tidak ada data laporan untuk kriteria pencarian ini.
                                 </td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-
         </div>
-
     </div>
 @endsection

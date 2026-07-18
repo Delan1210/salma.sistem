@@ -74,7 +74,7 @@ class AdminReservationController extends Controller
             'labels' => $chartData->pluck('name'),
             'totals' => $chartData->pluck('total'),
             'totalReservations' => $totalReservations,
-            'pendingReservations' => $pendingReservations,
+            'pendingReservations' => $pendingReservations, // Variabel ini nanti dipakai di JS
             'completedReservations' => $completedReservations,
             'totalRevenue' => $totalRevenue,
             'bookedDatesData' => $bookedDatesData,
@@ -143,7 +143,7 @@ class AdminReservationController extends Controller
 
         // Jika admin mengupload bukti QRIS/Transfer
         if ($request->hasFile('payment_proof')) {
-            $data['payment_proof'] = $request->file('payment_proof')->store('payments', 'public');
+            $data['payment_proof'] = $request->file('payment_proof')->store('payments');
         }
 
         Reservation::create($data);
@@ -167,7 +167,7 @@ class AdminReservationController extends Controller
         return back()->with('success', 'Status reservasi berhasil diperbarui.');
     }
 
-    public function destroy( string$id)
+    public function destroy( string $id)
     {
         // Cari data reservasi berdasarkan ID
         $reservation = Reservation::findOrFail($id);
@@ -184,9 +184,21 @@ class AdminReservationController extends Controller
         // Mulai merakit query untuk mengambil data dari tabel reservations
         $query = Reservation::with(['user', 'package']);
 
-        // Jika admin memasukkan filter tanggal mulai dan tanggal akhir
-        if ($request->start_date && $request->end_date) {
+        // 1. Logika Filter Tanggal
+        if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('reservation_date', [$request->start_date, $request->end_date]);
+        }
+
+        // 2. Logika Filter Kategori Paket (Photography / Cetak Foto)
+        if ($request->filled('category')) {
+            $query->whereHas('package', function($q) use ($request) {
+                $q->where('category', $request->category);
+            });
+        }
+
+        // 3. Logika Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
         // Ambil hasil datanya
@@ -194,5 +206,18 @@ class AdminReservationController extends Controller
 
         // Lempar data ke file View laporan
         return view('admin.reservations.report', compact('reservations'));
+    }
+
+    // FITUR BARU: Fungsi untuk mengecek pesanan baru secara realtime via AJAX
+
+    public function checkNewOrders()
+    {
+        // Hitung jumlah reservasi yang statusnya masih 'pending'
+        $pendingCount = Reservation::where('status', 'pending')->count();
+
+        // Kembalikan data dalam bentuk JSON agar mudah dibaca oleh JavaScript
+        return response()->json([
+            'pending_count' => $pendingCount
+        ]);
     }
 }

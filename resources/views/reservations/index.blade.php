@@ -6,7 +6,7 @@
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 style="color: #2c3e50; margin: 0;">Riwayat Reservasi Saya</h2>
-            <a href="{{ route('reservations.create') }}">
+            <a href="{{ route('catalog') }}"> <!-- Diarahkan ke katalog agar user pilih paket dulu -->
                 <button class="btn-primary">+ Buat Reservasi Baru</button>
             </a>
         </div>
@@ -20,7 +20,7 @@
         <div style="background-color: #e2f3f5; padding: 15px; border-left: 5px solid #17a2b8; margin-bottom: 20px; border-radius: 4px;">
             <strong style="color: #0c5460;">💳 Informasi Paket:</strong><br>
             <span style="color: #333;">Pastikan pembayaran sudah sesuai dengan harga katalog yang dipilih. Jika dirasa ingin mengubah paket, silakan hubungi admin.</span><br>
-            <strong style="font-size: 16px; color: #0056b3;">Admin: +62 822-5552-4446 a.n. Salma Photography atau klik logo WhatsApp bagian paling baawah.</strong><br>
+            <strong style="font-size: 16px; color: #0056b3;">Admin: +62 822-5552-4446 a.n. Salma Photography atau klik logo WhatsApp bagian paling bawah.</strong><br>
             <span style="color: #333; font-size: 14px;">Tolong jika ingin melakukan perubahan harap menghubungi admin minimal 24 jam sebelum tanggal reservasi.</span>
         </div>
 
@@ -29,9 +29,9 @@
                 <thead style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
                     <tr>
                         <th style="padding: 12px; text-align: left;">No</th>
-                        <th style="padding: 12px; text-align: left;">Paket Fotografi</th>
+                        <th style="padding: 12px; text-align: left;">Paket Pilihan</th>
                         <th style="padding: 12px; text-align: left;">Tanggal & Jam</th>
-                        <th style="padding: 12px; text-align: left;">Lokasi</th>
+                        <th style="padding: 12px; text-align: left;">Lokasi / Drive</th>
                         <th style="padding: 12px; text-align: left;">Catatan Saya</th>
                         <th style="padding: 12px; text-align: left;">Status</th>
                         <th style="padding: 12px; text-align: left;">Bukti Pembayaran</th>
@@ -42,8 +42,22 @@
                         <tr style="border-bottom: 1px solid #eee;">
                             <td style="padding: 12px;">{{ $index + 1 }}</td>
                             <td style="padding: 12px; font-weight: bold; color: #2c3e50;">{{ $reservation->package->name ?? 'Paket Tidak Ditemukan' }}</td>
-                            <td style="padding: 12px;">{{ $reservation->reservation_date }} <br> <span style="color: #7f8c8d; font-size: 13px;">{{ $reservation->reservation_time }}</span></td>
-                            <td style="padding: 12px;">{{ $reservation->location ?? '-' }}</td>
+                            <td style="padding: 12px;">
+                                {{ $reservation->reservation_date }} <br>
+                                @if($reservation->reservation_time && $reservation->reservation_time != '00:00:00')
+                                    <span style="color: #7f8c8d; font-size: 13px;">{{ substr($reservation->reservation_time, 0, 5) }} Wib</span>
+                                @endif
+                            </td>
+
+                            <td style="padding: 12px;">
+                                @if ($reservation->gdrive_link)
+                                    <a href="{{ $reservation->gdrive_link }}" target="_blank" style="color: #3498db; text-decoration: none; font-weight: bold;">📁 Buka Folder Drive</a>
+                                @elseif ($reservation->location)
+                                    {{ $reservation->location }}
+                                @else
+                                    -
+                                @endif
+                            </td>
 
                             <td style="padding: 12px; font-size: 13px; color: #555;">{{ $reservation->notes ?? '-' }}</td>
 
@@ -69,11 +83,12 @@
                                         </form>
                                     @else
                                         <span style="color: #28a745; font-weight: bold; font-size: 13px;">✔ Terkirim</span><br>
-                                        <!-- Ini link yang memanggil SweetAlert -->
-                                        <a href="javascript:void(0);" onclick="lihatBukti('{{ asset('storage/' . $reservation->payment_proof) }}')" style="font-size: 13px; color: #0056b3; text-decoration: underline; cursor: pointer;">Lihat Bukti</a>
+                                        <!-- REVISI: Mengubah link asset menjadi route payment.proof -->
+                                        <a href="javascript:void(0);" onclick="lihatBukti('{{ route('payment.proof', $reservation->id) }}')" style="font-size: 13px; color: #0056b3; text-decoration: underline; cursor: pointer;">Lihat Bukti</a>
                                     @endif
                                 @else
-                                    <span style="color: #6c757d;">-</span>
+                                    <!-- Jika status sudah dikonfirmasi/selesai, pelanggan tetap bisa melihat struknya -->
+                                    <a href="javascript:void(0);" onclick="lihatBukti('{{ route('payment.proof', $reservation->id) }}')" style="font-size: 13px; color: #0056b3; text-decoration: underline; cursor: pointer;">Lihat Bukti</a>
                                 @endif
                             </td>
                         </tr>

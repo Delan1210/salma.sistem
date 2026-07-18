@@ -28,7 +28,22 @@
     .package-img { width: 100%; height: 220px; object-fit: cover; }
     .package-body { padding: 25px; flex: 1; display: flex; flex-direction: column; }
     .package-title { color: #3A3959; font-size: 1.4rem; font-weight: 800; margin: 0 0 10px 0; }
-    .package-price { color: #27ae60; font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; }
+    .package-price { color: #27ae60; font-weight: 800; font-size: 1.2rem; margin-bottom: 5px; }
+
+    /* Label Favorit yang Lebih Rapi & Elegan */
+    .favorite-badge {
+        align-self: flex-start;
+        background: rgba(231, 76, 60, 0.1);
+        color: #e74c3c;
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.75rem;
+        margin-bottom: 12px;
+        border: 1px solid rgba(231, 76, 60, 0.2);
+        display: inline-block;
+        letter-spacing: 0.5px;
+    }
 
     /* Modifikasi Package Deskripsi agar Enter terbaca dan bisa di-scroll */
     .package-desc {
@@ -36,11 +51,11 @@
         font-size: 0.95rem;
         line-height: 1.6;
         margin-bottom: 25px;
-        white-space: pre-line; /* Membaca tombol Enter / Baris Baru */
-        max-height: 150px; /* Batas tinggi teks */
-        overflow-y: auto; /* Memunculkan scroll otomatis jika teks panjang */
-        padding-right: 5px; /* Jarak untuk scrollbar */
-        flex-grow: 1; /* Mendorong tombol booking ke bawah */
+        white-space: pre-line;
+        max-height: 150px;
+        overflow-y: auto;
+        padding-right: 5px;
+        flex-grow: 1;
     }
 
     /* Custom Scrollbar tipis untuk deskripsi */
@@ -62,15 +77,24 @@
     <h2 style="color: #3A3959; font-weight: 800; padding-left: 20px;">📸 Paket Fotografi Studio</h2>
     <div class="swiper swiper-foto">
         <div class="swiper-wrapper">
-            @foreach($photographyPackages as $package)
+            @foreach($photographyPackages as $index => $package)
             <div class="swiper-slide">
                 <div class="package-card">
                     <img src="{{ asset('storage/' . $package->image) }}" class="package-img">
                     <div class="package-body">
+
+                        <!-- BADGE FAVORIT PINDAH KE SINI: Di bawah gambar, di atas judul -->
+                        @if($index < 2 && $package->reservations_count > 0)
+                            <div class="favorite-badge">💖 Paket Favorit</div>
+                        @endif
+
                         <h3 class="package-title">{{ $package->name }}</h3>
                         <p class="package-price">Rp {{ number_format($package->price, 0, ',', '.') }}</p>
 
-                        <!-- Pemotong Str::limit dihapus, diubah menjadi div -->
+                        <p style="font-size: 12px; color: #7f8c8d; margin-top: 0; margin-bottom: 15px; font-weight: 600;">
+                            ⭐ Telah dipesan {{ $package->reservations_count }} kali
+                        </p>
+
                         <div class="package-desc">{{ $package->description }}</div>
 
                         <a href="{{ route('reservations.create', ['package_id' => $package->id]) }}" class="btn-book">Reservasi Sekarang</a>
@@ -87,15 +111,24 @@
     <h2 style="color: #3A3959; font-weight: 800; padding-left: 20px; margin-top: 50px;">🖨️ Paket Cetak Foto</h2>
     <div class="swiper swiper-cetak">
         <div class="swiper-wrapper">
-            @foreach($cetakPackages as $package)
+            @foreach($cetakPackages as $index => $package)
             <div class="swiper-slide">
                 <div class="package-card">
                     <img src="{{ asset('storage/' . $package->image) }}" class="package-img">
                     <div class="package-body">
+
+                        <!-- BADGE FAVORIT PINDAH KE SINI: Di bawah gambar, di atas judul -->
+                        @if($index < 2 && $package->reservations_count > 0)
+                            <div class="favorite-badge">💖 Paket Favorit</div>
+                        @endif
+
                         <h3 class="package-title">{{ $package->name }}</h3>
                         <p class="package-price">Rp {{ number_format($package->price, 0, ',', '.') }}</p>
 
-                        <!-- Pemotong Str::limit dihapus, diubah menjadi div -->
+                        <p style="font-size: 12px; color: #7f8c8d; margin-top: 0; margin-bottom: 15px; font-weight: 600;">
+                            ⭐ Telah dipesan {{ $package->reservations_count }} kali
+                        </p>
+
                         <div class="package-desc">{{ $package->description }}</div>
 
                         <a href="{{ route('reservations.create', ['package_id' => $package->id]) }}" class="btn-book">Pesan Cetak</a>

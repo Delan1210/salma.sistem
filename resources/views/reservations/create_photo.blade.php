@@ -123,10 +123,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             let disableDates = @json($bookedDates ?? []);
 
+            // Buat variabel untuk hari besok
+            let besok = new Date();
+            besok.setDate(besok.getDate() + 1);
+
             // Kalender Tanggal
             flatpickr("#reservation_date", {
                 disable: disableDates,
-                minDate: "today",
+                minDate: besok,
                 dateFormat: "Y-m-d"
             });
 

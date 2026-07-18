@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage; // WAJIB TAMBAHKAN INI UNTUK MEMBACA FILE DENGAN AMAN
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReservationController;
@@ -33,8 +35,35 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // === ROUTES UNTUK PELANGGAN BUKAN ADMIN ===
 Route::middleware('auth')->group(function () {
-    // ⚠️ BARIS Route::resource('packages') SUDAH DIHAPUS DARI SINI
     Route::resource('reservations', ReservationController::class);
+
+    // =========================================================================
+    // FITUR BARU: Route Penjaga Pintu untuk Private Storage (Bukti Pembayaran)
+    // =========================================================================
+    Route::get('/payment-proof/{id}', function ($id) {
+        $reservation = \App\Models\Reservation::findOrFail($id);
+
+        // Cek keamanan: Yang boleh lihat cuma Admin atau si pelanggan yang punya struk
+        if (Auth::user()->role !== 'admin' && Auth::id() !== $reservation->user_id) {
+            abort(403, 'Akses Ditolak: Anda tidak diizinkan melihat dokumen rahasia ini.');
+        }
+
+        $file = $reservation->payment_proof;
+
+        // LOGIKA PINTAR V2: Menggunakan Storage Facade (Best Practice Laravel)
+        // 1. Cek disk 'local' (Brankas rahasia / Private Storage untuk pesanan baru)
+        if (Storage::disk('local')->exists($file)) {
+            return response()->file(Storage::disk('local')->path($file));
+        }
+        // 2. Cek disk 'public' (Public Storage untuk pesanan lama)
+        elseif (Storage::disk('public')->exists($file)) {
+            return response()->file(Storage::disk('public')->path($file));
+        }
+        // Jika keduanya tidak ada
+        else {
+            abort(404, 'Bukti pembayaran tidak ditemukan di dalam sistem server.');
+        }
+    })->name('payment.proof');
 });
 
 // Upload bukti pembayaran
@@ -71,4 +100,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
         'update' => 'admin.packages.update',
         'destroy' => 'admin.packages.destroy',
     ]);
+
+    // Mengecek notifikasi pesanan baru (AJAX)
+    Route::get('/admin/check-new-orders', [AdminReservationController::class, 'checkNewOrders'])->name('admin.check_orders');
 });

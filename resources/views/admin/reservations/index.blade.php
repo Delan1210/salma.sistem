@@ -67,8 +67,8 @@
         }
 
         /* Varian Warna Gradient Mewah */
-        .bg-revenue { background: linear-gradient(135deg, #3A3959, #57557A); } /* Palette Utama */
-        .bg-total { background: linear-gradient(135deg, #706F8E, #9290B3); }   /* Palette Sekunder */
+        .bg-revenue { background: linear-gradient(135deg, #3A3959, #57557A); }
+        .bg-total { background: linear-gradient(135deg, #706F8E, #9290B3); }
         .bg-pending { background: linear-gradient(135deg, #f39c12, #f1c40f); }
         .bg-completed { background: linear-gradient(135deg, #27ae60, #2ecc71); }
 
@@ -186,7 +186,9 @@
         .status-pending { background-color: #FFF9E6; color: #D35400; }
         .status-confirmed { background-color: #EBF5FF; color: #2980b9; }
         .status-completed { background-color: #EBF7EE; color: #27ae60; }
-        .status-cancelled { background-color: #FFECEB; color: #c0392b; }
+
+        /* Ubah warna badge 'Finished' agar lebih netral (abu-abu) jika diinginkan, atau biarkan bawaannya */
+        .status-cancelled { background-color: #EAEBE6; color: #3A3959; }
 
         /* Form Controls */
         .form-select {
@@ -231,7 +233,7 @@
 
         <div class="grid-layout">
             <div class="box-container">
-                <h3 class="box-title">📊 Analisis Penunjan Paket</h3>
+                <h3 class="box-title">📊 Analisis Penjualan Paket</h3>
                 <div style="width: 100%; max-width: 310px; margin: 0 auto;">
                     <canvas id="myChart"></canvas>
                 </div>
@@ -315,13 +317,16 @@
                                     @if (str_contains($reservation->payment_proof, 'offline'))
                                         <span style="color: #27ae60; font-weight: 700; font-size: 13px;">💵 Cash (COD)</span>
                                     @elseif ($reservation->payment_proof)
-                                        <button type="button" onclick="bukaModal('{{ asset('storage/' . $reservation->payment_proof) }}')" style="background: none; border: none; color: #3498db; text-decoration: none; font-weight: 700; cursor: pointer; padding: 0; font-size: 13.5px;">👁️ Lihat Struk</button>
+                                        <button type="button" onclick="lihatBukti('{{ route('payment.proof', $reservation->id) }}')" style="background: none; border: none; color: #3498db; text-decoration: none; font-weight: 700; cursor: pointer; padding: 0; font-size: 13.5px;">👁️ Lihat Struk</button>
                                     @else
                                         <span style="color: #e74c3c; font-weight: 600; font-size: 13px;">Belum Upload</span>
                                     @endif
                                 </td>
                                 <td align="center">
-                                    <span class="badge status-{{ $reservation->status }}">{{ $reservation->status }}</span>
+                                    <!-- Logika untuk menampilkan kata Finished di badge -->
+                                    <span class="badge status-{{ $reservation->status }}">
+                                        {{ $reservation->status == 'cancelled' ? 'Finished' : ucfirst($reservation->status) }}
+                                    </span>
                                 </td>
                                 <td align="center">
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -331,7 +336,8 @@
                                                 <option value="pending" {{ $reservation->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                                 <option value="confirmed" {{ $reservation->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                                                 <option value="completed" {{ $reservation->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                                <option value="cancelled" {{ $reservation->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                <!-- Opsi ke-4: Disimpan sebagai 'cancelled' agar DB aman, tapi ditulis Finished -->
+                                                <option value="cancelled" {{ $reservation->status == 'cancelled' ? 'selected' : '' }}>Finished</option>
                                             </select>
                                             <button type="submit" class="btn-action btn-blue">🔄</button>
                                         </form>
@@ -404,13 +410,16 @@
                                     @if (str_contains($reservation->payment_proof, 'offline'))
                                         <span style="color: #27ae60; font-weight: 700; font-size: 13px;">💵 Cash (COD)</span>
                                     @elseif ($reservation->payment_proof)
-                                        <button type="button" onclick="bukaModal('{{ asset('storage/' . $reservation->payment_proof) }}')" style="background: none; border: none; color: #3498db; text-decoration: none; font-weight: 700; cursor: pointer; padding: 0; font-size: 13.5px;">👁️ Lihat Struk</button>
+                                        <button type="button" onclick="lihatBukti('{{ route('payment.proof', $reservation->id) }}')" style="background: none; border: none; color: #3498db; text-decoration: none; font-weight: 700; cursor: pointer; padding: 0; font-size: 13.5px;">👁️ Lihat Struk</button>
                                     @else
                                         <span style="color: #e74c3c; font-weight: 600; font-size: 13px;">Belum Upload</span>
                                     @endif
                                 </td>
                                 <td align="center">
-                                    <span class="badge status-{{ $reservation->status }}">{{ $reservation->status }}</span>
+                                    <!-- Logika untuk menampilkan kata Finished di badge -->
+                                    <span class="badge status-{{ $reservation->status }}">
+                                        {{ $reservation->status == 'cancelled' ? 'Finished' : ucfirst($reservation->status) }}
+                                    </span>
                                 </td>
                                 <td align="center">
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -420,11 +429,12 @@
                                                 <option value="pending" {{ $reservation->status == 'pending' ? 'selected' : '' }}>Pending</option>
                                                 <option value="confirmed" {{ $reservation->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                                                 <option value="completed" {{ $reservation->status == 'completed' ? 'selected' : '' }}>Completed</option>
-                                                <option value="cancelled" {{ $reservation->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                                                <!-- Opsi ke-4: Disimpan sebagai 'cancelled' agar DB aman, tapi ditulis Finished -->
+                                                <option value="cancelled" {{ $reservation->status == 'cancelled' ? 'selected' : '' }}>Finished</option>
                                             </select>
                                             <button type="submit" class="btn-action btn-blue">🔄</button>
                                         </form>
-                                        <form action="{{ route('admin.reservations.destroy', $reservation->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data pesanan cetak foto ini?')" style="width: 100%;">
+                                        <form action="{{ route('admin.reservations.destroy', $reservation->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data pesanan ini selamanya?')" style="width: 100%;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-action btn-red">🗑️ Hapus</button>
@@ -442,100 +452,115 @@
             </div>
         </div>
 
-    </div> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    </div>
+
+    <!-- Scripts Khusus Admin Dashboard -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Inisialisasi Chart.js
-        @if (isset($labels) && isset($totals))
-            const ctx = document.getElementById('myChart');
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: {!! json_encode($labels) !!},
-                    datasets: [{
-                        label: 'Total Terjual',
-                        data: {!! json_encode($totals) !!},
-                        backgroundColor: ['#3A3959', '#706F8E', '#2ecc71', '#9b59b6', '#f1c40f', '#e74c3c', '#34495e'],
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    plugins: { legend: { position: 'bottom' } }
-                }
+        // Fungsi pop-up SweetAlert
+        function lihatBukti(imageUrl) {
+            Swal.fire({
+                title: 'Bukti Pembayaran',
+                text: 'Mengambil data dari brankas rahasia (Private Storage)...',
+                imageUrl: imageUrl,
+                imageWidth: 400,
+                imageAlt: 'Foto Bukti Pembayaran',
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#3A3959',
+                backdrop: `rgba(34, 34, 46, 0.8)`
             });
-        @endif
+        }
 
-        // Inisialisasi Kalender Pintar Admin
         document.addEventListener('DOMContentLoaded', function() {
-            let bookedData = @json($bookedDatesData ?? []);
+
+            // Script Inisialisasi Chart.js (Grafik Penjualan)
+            const ctx = document.getElementById('myChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: {!! json_encode($labels ?? []) !!},
+                        datasets: [{
+                            label: 'Jumlah Terpesan',
+                            data: {!! json_encode($totals ?? []) !!},
+                            backgroundColor: [
+                                '#3A3959', '#706F8E', '#3498db', '#f39c12', '#e74c3c', '#2ecc71', '#9b59b6'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { family: 'Segoe UI' } } }
+                        }
+                    }
+                });
+            }
+
+            // Script Kalender Admin dengan Flatpickr
+            let bookedData = {!! json_encode($bookedDatesData ?? []) !!};
 
             flatpickr("#admin-calendar", {
                 inline: true,
-                minDate: "today",
                 dateFormat: "Y-m-d",
                 onDayCreate: function(dObj, dStr, fp, dayElem) {
                     let dateStr = fp.formatDate(dayElem.dateObj, "Y-m-d");
+
                     if (bookedData[dateStr]) {
                         let info = bookedData[dateStr];
+
                         if (info.status === 'full') {
-                            dayElem.classList.add('fully-booked');
+                            dayElem.style.backgroundColor = '#FFECEB';
+                            dayElem.style.color = '#c0392b';
+                            dayElem.style.fontWeight = 'bold';
+                            dayElem.title = 'Jadwal Penuh';
                         } else if (info.status === 'partial') {
-                            dayElem.classList.add('partially-booked');
+                            dayElem.style.backgroundColor = '#FFF9E6';
+                            dayElem.style.color = '#d35400';
+                            dayElem.style.fontWeight = 'bold';
+                            dayElem.title = 'Terisi Sebagian (' + info.booked_hours.length + ' sesi)';
                         }
-                    }
-                },
-                onChange: function(selectedDates, dateStr, instance) {
-                    if (bookedData[dateStr]) {
-                        let info = bookedData[dateStr];
-                        let jamList = info.booked_hours.map(j => `<li>${j}</li>`).join('');
-                        Swal.fire({
-                            title: `Jadwal Tgl ${dateStr}`,
-                            html: `
-                                <div style="font-size: 1.1rem; color: #2c3e50;">
-                                    Jam yang sudah <b>ter-booking</b>:<br>
-                                    <ul style="text-align:left; display:inline-block; margin-top: 10px; color: #e74c3c; font-weight: bold;">
-                                        ${jamList}
-                                    </ul><br>
-                                    ${info.status === 'partial' ? '<span style="color: #27ae60;">Sisa jam masih tersedia!</span>' : '<span style="color: #e74c3c;">Studio penuh hari ini.</span>'}
-                                </div>
-                            `,
-                            icon: info.status === 'full' ? 'error' : 'info',
-                            confirmButtonColor: '#3A3959'
-                        });
-                    } else {
-                        Swal.fire({
-                            title: `Jadwal Tgl ${dateStr}`,
-                            text: "Studio masih kosong seharian!",
-                            icon: 'success',
-                            confirmButtonColor: '#27ae60'
-                        });
                     }
                 }
             });
+
+            // Script AJAX Polling (Notifikasi Real-time)
+            let currentPendingCount = {{ $pendingReservations ?? 0 }};
+
+            function checkNewOrders() {
+                fetch("{{ route('admin.check_orders') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.pending_count > currentPendingCount) {
+                            // Pop-up Notifikasi
+                            Swal.fire({
+                                title: 'Pesanan Baru Masuk!',
+                                text: 'Ada pelanggan yang baru saja melakukan reservasi. Halaman akan dimuat ulang...',
+                                icon: 'info',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                backdrop: `rgba(58, 57, 89, 0.4)`
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                            currentPendingCount = data.pending_count;
+                        }
+                        else if (data.pending_count < currentPendingCount) {
+                            currentPendingCount = data.pending_count;
+                        }
+                    })
+                    .catch(error => console.error('Gagal mengecek pesanan:', error));
+            }
+
+            // Cek ke database setiap 10 detik
+            setInterval(checkNewOrders, 10000);
         });
-    </script>
-
-    <div id="modalBuktiBayar" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; backdrop-filter: blur(5px);">
-        <div style="position: relative; max-width: 90%; max-height: 90%; text-align: center;">
-            <button onclick="tutupModal()" style="position: absolute; top: -15px; right: -15px; background-color: #e74c3c; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 10001;">X</button>
-            <img id="gambarStruk" src="" alt="Bukti Pembayaran" style="max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); object-fit: contain; background-color: white;">
-        </div>
-    </div>
-
-    <script>
-        function bukaModal(urlGambar) {
-            document.getElementById('gambarStruk').src = urlGambar;
-            document.getElementById('modalBuktiBayar').style.display = 'flex';
-        }
-        function tutupModal() {
-            document.getElementById('modalBuktiBayar').style.display = 'none';
-            document.getElementById('gambarStruk').src = '';
-        }
-        window.onclick = function(event) {
-            var modal = document.getElementById('modalBuktiBayar');
-            if (event.target == modal) { tutupModal(); }
-        }
     </script>
 @endsection

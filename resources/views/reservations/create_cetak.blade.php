@@ -47,10 +47,9 @@
             @csrf
             <input type="hidden" name="package_id" value="{{ $package->id }}">
 
-            <!-- Input otomatis untuk database -->
-            <input type="hidden" name="reservation_date" value="{{ date('Y-m-d') }}">
+            <!-- Input otomatis untuk database agar tidak error -->
             <input type="hidden" name="reservation_time" value="00:00">
-            <input type="hidden" name="location" value="Kirim File Online">
+            <input type="hidden" name="location" value="Cetak Foto (Online)">
 
             <div class="package-summary">
                 <p style="margin: 0; color: #706F8E; font-size: 14px; font-weight: bold;">Paket Pilihan Anda:</p>
@@ -61,7 +60,28 @@
             </div>
 
             <div class="alert-cetak">
-                ℹ️ <b>Paket Cetak Foto</b> tidak memerlukan jadwal studio. Silakan langsung mengunggah foto yang ingin dicetak pada link Google Drive di bagian "Catatan", lalu selesaikan pembayaran.
+                ℹ️ <b>Paket Cetak Foto</b> tidak memerlukan jadwal studio. Silakan isi form di bawah ini dan unggah foto Anda melalui link Google Drive.
+            </div>
+
+            <!-- TANGGAL PENGAMBILAN (Mencegah error after_or_equal:tomorrow) -->
+            <div>
+                <label class="form-label">Tanggal Pengambilan / Pesanan Selesai</label>
+                <!-- Atribut 'min' menggunakan PHP Carbon agar besok otomatis terpilih sebagai batas awal -->
+                <input type="date" name="reservation_date" class="form-control" required min="{{ \Carbon\Carbon::tomorrow()->format('Y-m-d') }}">
+                <small style="color: #706F8E; display: block; margin-top: -15px; margin-bottom: 20px;">*Sesuai aturan sistem, pilih minimal 1 hari dari hari ini.</small>
+            </div>
+
+            <!-- LINK GOOGLE DRIVE -->
+            <div>
+                <label class="form-label">Link Google Drive (Folder Foto)</label>
+                <input type="url" name="gdrive_link" class="form-control" placeholder="https://drive.google.com/..." required>
+                <small style="color: #706F8E; display: block; margin-top: -15px; margin-bottom: 20px;">*Pastikan akses folder Google Drive diset ke "Siapa saja yang memiliki link" (Public).</small>
+            </div>
+
+            <!-- CATATAN DETAIL CETAK -->
+            <div>
+                <label class="form-label">Catatan Detail Cetak</label>
+                <textarea name="notes" rows="3" class="form-control" placeholder="Contoh: Ukuran 4R (5 lembar), 10R pakai bingkai (1 lembar)..." required></textarea>
             </div>
 
             <div class="payment-box">
@@ -81,11 +101,6 @@
             <div>
                 <label class="form-label">Upload Bukti Pembayaran</label>
                 <input type="file" name="payment_proof" accept="image/*" class="form-control" required style="padding: 9px 15px;">
-            </div>
-
-            <div>
-                <label class="form-label">Catatan Link Foto</label>
-                <textarea name="notes" rows="3" class="form-control" placeholder="Paste link Google Drive berisi foto yang ingin dicetak di sini..."></textarea>
             </div>
 
             <button type="submit" class="btn-submit">Kirim Pesanan Cetak</button>
